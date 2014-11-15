@@ -1,4 +1,4 @@
-Name: Galactic Armory 1.9.3
+Name: Galactic Armory 1.9.4
 
 Authors:	Galactic Armory Mod Project
 

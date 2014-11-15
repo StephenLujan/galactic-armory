@@ -133,7 +133,10 @@ bool checkTrade(Planet@ pl)
 	State@ govTrade = obj.getState(strGovTrade);
 
 	bool maxed = false;
-	if(gameTime - govTrade.val > 5.f || gameTime <= 30) {
+	if(govTrade.val == 0)    
+		govTrade.val = gameTime;
+    
+	if(gameTime - govTrade.val > 90.f)   {
 		//Work off an average of the last update and this one
 		float req = (trade.inCargo + govTrade.max) / 2;
 
@@ -141,16 +144,14 @@ bool checkTrade(Planet@ pl)
 		if(req > trade.max * 10)
 			return false;
 			
-		if(req >= trade.max)
+		if(req > trade.max)
 			maxed = true;
+			
 			
 		govTrade.val = gameTime;
 		govTrade.max = req;
 	}
-
-	// Only continues if the planet is using its maximum trade capability for the last 10 seconds.
-	// This will not be completely accurate as if a planet is importing the rate will be maxed
-	// Need to find a way around this.
+	
 	if(!maxed)
 		return false;
 
