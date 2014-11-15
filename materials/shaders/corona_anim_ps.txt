@@ -38,8 +38,7 @@ void main() {
 	
 	float brightness = (texture2D(corona, pos, -3.0).r - (0.4 + r*0.2)) * 2.0;
 	
-	vec3 color;
-	color += coronaFlame * (1.0-r);
+	vec3 color = coronaFlame * (1.0-r);
 	
 	if(brightness > 0.0) {
 		brightness = pow(brightness,(0.15+(r*1.85)));

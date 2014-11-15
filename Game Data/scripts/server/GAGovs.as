@@ -1,11 +1,12 @@
 //Globals
-ObjectFlag objImprovement = objUser03, setImpPause = objSetting00;
+ObjectFlag objImprovement = objUser03, setImpPause = objSetting00, setAutoTerra = objSetting01;
 bool initialized;
 
 //Constants
 const string@ strWorkers = "Workers", strTrade = "Trade", strGovTrade = "GovTrade";
 const string@ strFuel = "Fuel", strAmmo = "Ammo", strFood = "Food";
 const string@ strMtl = "Metals", strElc = "Electronics", strAdv = "AdvParts";
+const string@ strTerraform = "Terraform";
 
 const float mil = 1000000.0f;
 const subSystemDef@ city = null;
@@ -13,6 +14,8 @@ const subSystemDef@ port = null;
 const subSystemDef@ capitol = null;
 const subSystemDef@ GC = null;
 const subSystemDef@ yard = null;
+
+import void terraForm(string@ sID, float Oid) from "GAImprovements";
 
 void init() {
 	@city = getSubSystemDefByName("City");
@@ -42,7 +45,31 @@ bool setGov(Planet@ pl)
 	if(obj.getFlag(objImprovement) && !obj.getFlag(setImpPause))
 		return true;
 
-	return false;
+	return checkTerraform(pl);
+}
+
+bool checkTerraform(Planet@ pl)
+{
+ 	Object@ obj = pl;
+ 	Empire@ emp = obj.getOwner();
+ 	
+ 	if( !obj.getFlag(setAutoTerra) || obj.getFlag(setImpPause) )
+ 		return false;
+ 	
+ 	uint slots = pl.getMaxStructureCount(), structs = pl.getStructureCount();
+ 
+ 	if(structs == slots && obj.getState(strTerraform).val > 0)
+ 	{
+ 		const subSystemDef@ def = getSubSystemDefByName("Terraforming");
+ 		
+ 		if( !(def is null) && emp.subSysUnlocked(def) )
+ 		{
+ 			terraForm("Terraforming", obj.uid);
+ 			return true;
+ 		}
+ 	}
+ 	
+ 	return false;
 }
 
 /*

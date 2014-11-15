@@ -35,7 +35,7 @@ string@ strElectronics = "Electronics";
 const string@ strLuxsGen = "LuxG", strGudsGen = "GudsG", strTrade = "Trade", strTradeMode = "TradeMode";
 const double million = 1000000.0;
 
-ObjectFlag objImprovement = objUser03, setImpPause = objSetting00;
+ObjectFlag objImprovement = objUser03, setImpPause = objSetting00, setAutoTerra = objSetting01;
 const string@ strFormer = "Former", strTotalCosts = "impTotalCosts", strTerraform = "Terraform", strCosts = "impCosts";
 string@ impName;
 
@@ -165,6 +165,7 @@ class PlanetWindow : ScriptedGuiHandler {
 
 	GuiComboBox@ governor;
 	GuiCheckBox@ useGovernor;
+	GuiCheckBox@ autoTerra;
 
 	GuiImage@ pinImg;
 
@@ -318,6 +319,7 @@ class PlanetWindow : ScriptedGuiHandler {
 		blockadedText.setToolTip(localize("#MOTT_Blockade"));
 		@governor = GuiComboBox(recti(pos2di(125 + 7, 41 + 11), dim2di(180, 20)), ele);
 		@useGovernor = GuiCheckBox(false, recti(pos2di(125, 53), dim2di(200, 22)), localize("#PL_USE_GOVERNOR"), topPanel);
+		@autoTerra = GuiCheckBox(false, recti(pos2di(125, 73), dim2di(200, 22)), localize("#PL_AUTO_TERRA"), topPanel);
 
 		@nextButton = Button(dim2di(100, 21), localize("#PL_NEXT"), topPanel);
 		nextButton.setToolTip(localize("#PLTT_Next"));
@@ -594,6 +596,7 @@ class PlanetWindow : ScriptedGuiHandler {
 
 		governor.setPosition(pos2di(topWidth - 197 + 7, 41 + 11));
 		useGovernor.setPosition(pos2di(topWidth - 197, 53));
+		autoTerra.setPosition(pos2di(topWidth - 197, 73));
 
 		// Position resource grid
 		resources.setCellSize(dim2di((size.width - 14) / 6, 17));
@@ -835,6 +838,7 @@ class PlanetWindow : ScriptedGuiHandler {
 		// Update top bar information
 		updateCurrentGovernor();
 		useGovernor.setChecked(planet.usesGovernor());
+		autoTerra.setChecked(obj.getFlag(setAutoTerra));
 		updateBuildables();
 		updateTerrestial();	
 		refreshTerraInformation();		
@@ -1371,6 +1375,10 @@ class PlanetWindow : ScriptedGuiHandler {
 					setUseGovernor(useGovernor.isChecked());
 					return ER_Pass;
 				}
+ 				else if (evt.Caller is autoTerra) {
+ 					setAutoTerra(autoTerra.isChecked());
+ 					return ER_Pass;
+ 				}
 				else if (evt.Caller is allowImport || evt.Caller is allowExport) {
 					int mode = 0;
 					if (!allowImport.isChecked()) {
@@ -2117,6 +2125,11 @@ class PlanetWindow : ScriptedGuiHandler {
 	void setUseGovernor(bool use) {
 		planet.setUseGovernor(use);
 	}
+
+    void setAutoTerra(bool enable) {
+ 		Object@ obj = planet;
+ 		obj.setFlag(setAutoTerra, enable);
+    }
 	
 	void setTradeMode(int mode) {
 		float val = float(mode);

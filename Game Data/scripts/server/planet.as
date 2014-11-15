@@ -23,7 +23,7 @@ const string@ strPosition = "position", strRotation = "rotation";
 const double million = 1000000.0;
 const double c_e = 2.71828183;
 
-ObjectFlag objImprovement = objUser03, setImpPause = objSetting00;;
+ObjectFlag objImprovement = objUser03, setImpPause = objSetting00, setAutoTerra = objSetting01;
 
 //Conversion rates when working with no resources (scales down from 1 to this value as the value/max ratio declines)
 const float deadOreRate = 0.2f;
@@ -133,6 +133,8 @@ void popEcoInit(Event@ evt) {
 	evt.obj.getState(strElcGenOpt);
 	evt.obj.getState(strAdvGenOpt);
 
+ 	Empire@ emp = evt.obj.getOwner();
+ 	evt.obj.setFlag(setAutoTerra, emp.getSetting("autoTerra") >= 0.5f);
 	print("Planet Initialized");
 }
 

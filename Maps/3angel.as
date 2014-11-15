@@ -61,7 +61,7 @@ void makeMap(Galaxy@ Glx) {
 				gateIndex++;
 			updateBridgeProgress(gateIndex,availableGates);
 		}
-	}s
+	}
 }
 
 Planet@ setupHomeworld(System@ sys, Empire@ owner) {

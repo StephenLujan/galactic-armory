@@ -8,8 +8,9 @@ const float circleRads = 6.28318531; //2 * pi
 
 void main() {
 	vec4 tc = texture2D(texture, gl_TexCoord[0].xy);
-	tc.rgb -= 0.5 + (maxVariance * sin(cycle * circleRads) * cos(tc.r * (circleRads * deviationCycles)) );
-	tc.rgb *= 2.0;
+	//0.5
+	tc.rgb -= 0.35 + (maxVariance * sin(cycle * circleRads) * cos(tc.r * (circleRads * deviationCycles)) );
+	tc.rgb *= 1.4;//2
 	tc.a = 0.0;
 	gl_FragColor = (gl_FrontMaterial.diffuse * gl_Color.a) + tc;
 }

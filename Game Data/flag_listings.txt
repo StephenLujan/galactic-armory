@@ -6,3 +6,6 @@ objUser04 - Unused
 objUser05 - Unused
 objUser06 - Unused
 objUser07 - AI
+
+objSetting00 - Improvement Pause
+objSetting01 - Automatical Terraforming

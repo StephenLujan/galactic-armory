@@ -2129,6 +2129,7 @@ lightly but decided upon with care.
 #EM_Ships: Ships
 #EM_Planets: Planets
 #EM_GovText: New colonies use governors
+#EM_TerraText: Governors can terraform
 #EM_ParkText: New ships park in orbit
 #EM_AtWar: At War
 #EM_Allies: Allies
@@ -2236,6 +2237,7 @@ lightly but decided upon with care.
 
 #PL_STRUCTURES: Structures
 #PL_USE_GOVERNOR: Use Planetary Governor
+#PL_AUTO_TERRA: Governor Can Terraform
 #PL_KEEP_SELECTED: Keep planet selected
 #PL_Pin: Toggle whether this window is locked to its current planet or follows the selection.
 #PL_NoConditions: No planetary conditions present...

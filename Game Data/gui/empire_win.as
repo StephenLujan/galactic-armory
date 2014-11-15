@@ -16,6 +16,9 @@ import void hideEventIndicator(GuiElement@ ele) from "gui";
 
 import recti makeScreenCenteredRect(const dim2di &in rectSize) from "gui_lib";
 
+const string@ strTerraform = "Terraform";
+ObjectFlag setAutoTerra = objSetting01;
+
 /* {{{ Window Handle */
 class EmpireWindowHandle {
 	EmpireWindow@ script;
@@ -112,6 +115,7 @@ class EmpireWindow : ScriptedGuiHandler {
 
 	GuiStaticText@ governorCaption;
 	GuiCheckBox@ autoParkCheck;
+    GuiCheckBox@ autoTerraCheck;
 	GuiCheckBox@ autoGovCheck;
 	GuiComboBox@ governorTypes;
 
@@ -191,7 +195,8 @@ class EmpireWindow : ScriptedGuiHandler {
 			empName.setFont("title");
 
 			// Empire settings
-			@autoParkCheck = GuiCheckBox(false, recti(pos2di(120, 34), dim2di(220, 20)), localize("#EM_ParkText"), topPanel);
+			@autoParkCheck = GuiCheckBox(false, recti(pos2di(350, 34), dim2di(220, 20)), localize("#EM_ParkText"), topPanel);
+			@autoTerraCheck = GuiCheckBox(false, recti(pos2di(120, 34), dim2di(220, 20)), localize("#EM_TerraText"), topPanel);
 			@autoGovCheck = GuiCheckBox(false, recti(pos2di(120, 56), dim2di(220, 20)), localize("#EM_GovText"), topPanel);
 			@governorCaption = GuiStaticText(recti(pos2di(120, 78), dim2di(120, 20)), localize("#EM_DefaultGov"), false, false, false, topPanel);
 			@governorTypes = GuiComboBox(recti(pos2di(250, 78), dim2di(140, 20)), topPanel);
@@ -248,6 +253,7 @@ class EmpireWindow : ScriptedGuiHandler {
 		empName.setColor(emp.color);
 
 		autoParkCheck.setChecked(emp.getSetting("autoPark") >= 0.5f);
+		autoTerraCheck.setChecked(emp.getSetting("autoTerra") >= 0.5f);
 		autoGovCheck.setChecked(emp.getSetting("autoGovern") >= 0.5f);
 		updateGovernorTypes(emp);
 
@@ -279,6 +285,7 @@ class EmpireWindow : ScriptedGuiHandler {
 				empImg.setVisible(showEmpFlag);
 				empName.setVisible(showEmpData);
 				autoParkCheck.setVisible(showEmpSettings);
+				autoTerraCheck.setVisible(showEmpSettings);
 				autoGovCheck.setVisible(showEmpSettings);
 				governorCaption.setVisible(showEmpSettings);
 				governorTypes.setVisible(showEmpSettings);
@@ -454,6 +461,18 @@ class EmpireWindow : ScriptedGuiHandler {
 					emp.setSetting("autoPark", autoParkCheck.isChecked() ? 1.f : 0.f);
 					return ER_Pass;
 				}
+ 				else if (evt.Caller is autoTerraCheck) {
+ 					emp.setSetting("autoTerra", autoTerraCheck.isChecked() ? 1.f : 0.f);
+ 					EmpireObjects objects;
+ 					objects.prepare(emp);
+ 					do
+ 					{
+ 						Object@ obj = objects.getObject();
+ 						if( obj.hasState(strTerraform) )
+ 							obj.setFlag(setAutoTerra, autoTerraCheck.isChecked());
+ 					} while(objects.nextObject());
+ 					return ER_Pass;
+ 				}
 			break;
 			case GEVT_ComboBox_Changed:
 				if (evt.Caller is governorTypes) {
